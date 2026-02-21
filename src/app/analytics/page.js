@@ -126,34 +126,55 @@ export default function AnalyticsPage() {
     {
       key: 'trips',
       label: 'Trips',
-      render: (_, row) => trips.filter((t) => t.vehicleId === row._id).length,
+      render: (_, row) => {
+        const vehicleId = row._id?.toString?.() || row._id;
+        return trips.filter((t) => {
+          const tVehicleId = t.vehicleId?._id?.toString?.() || t.vehicleId?.toString?.() || t.vehicleId;
+          return tVehicleId === vehicleId;
+        }).length;
+      },
     },
     {
       key: 'revenue',
       label: 'Revenue',
-      render: (_, row) =>
-        trips
-          .filter((t) => t.vehicleId === row._id)
-          .reduce((sum, t) => sum + (t.revenue || 0), 0)
-          .toFixed(2),
+      render: (_, row) => {
+        const vehicleId = row._id?.toString?.() || row._id;
+        const revenue = trips
+          .filter((t) => {
+            const tVehicleId = t.vehicleId?._id?.toString?.() || t.vehicleId?.toString?.() || t.vehicleId;
+            return tVehicleId === vehicleId;
+          })
+          .reduce((sum, t) => sum + (t.revenue || 0), 0);
+        return `₹${revenue.toFixed(2)}`;
+      },
     },
     {
       key: 'fuelCost',
       label: 'Fuel Cost',
-      render: (_, row) =>
-        expenses
-          .filter((e) => e.vehicleId === row._id)
-          .reduce((sum, e) => sum + (e.cost || 0), 0)
-          .toFixed(2),
+      render: (_, row) => {
+        const vehicleId = row._id?.toString?.() || row._id;
+        const fuelCost = expenses
+          .filter((e) => {
+            const eVehicleId = e.vehicleId?._id?.toString?.() || e.vehicleId?.toString?.() || e.vehicleId;
+            return eVehicleId === vehicleId;
+          })
+          .reduce((sum, e) => sum + (e.cost || 0), 0);
+        return `₹${fuelCost.toFixed(2)}`;
+      },
     },
     {
       key: 'maintenanceCost',
       label: 'Maintenance',
-      render: (_, row) =>
-        maintenanceLogs
-          .filter((m) => m.vehicleId === row._id)
-          .reduce((sum, m) => sum + (m.cost || 0), 0)
-          .toFixed(2),
+      render: (_, row) => {
+        const vehicleId = row._id?.toString?.() || row._id;
+        const maintCost = maintenanceLogs
+          .filter((m) => {
+            const mVehicleId = m.vehicleId?._id?.toString?.() || m.vehicleId?.toString?.() || m.vehicleId;
+            return mVehicleId === vehicleId;
+          })
+          .reduce((sum, m) => sum + (m.cost || 0), 0);
+        return `₹${maintCost.toFixed(2)}`;
+      },
     },
     {
       key: 'roi',

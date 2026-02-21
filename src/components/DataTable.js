@@ -1,12 +1,13 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { Inbox } from 'lucide-react';
 
 export function DataTable({ columns, data, onRowClick }) {
   if (!data || data.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16">
-        <div className="text-5xl mb-4">📭</div>
+        <Inbox className="w-16 h-16 text-zinc-400 mb-4" />
         <p className="text-zinc-500 text-lg font-medium">No data available</p>
         <p className="text-zinc-400 text-sm mt-1">Once you add items, they'll appear here</p>
       </div>
@@ -38,14 +39,32 @@ export function DataTable({ columns, data, onRowClick }) {
               className="hover:bg-zinc-50 transition-colors duration-300 cursor-pointer group"
               onClick={() => onRowClick && onRowClick(row)}
             >
-              {columns.map((col) => (
-                <td
-                  key={col.key}
-                  className="px-6 py-4 text-sm text-zinc-700 group-hover:text-zinc-900 transition-colors duration-300"
-                >
-                  {col.render ? col.render(row[col.key], row) : row[col.key]}
-                </td>
-              ))}
+              {columns.map((col) => {
+                try {
+                  const value = row[col.key];
+                  const content = col.render 
+                    ? col.render(value, row) 
+                    : (value !== null && value !== undefined ? String(value) : '-');
+                  return (
+                    <td
+                      key={col.key}
+                      className="px-6 py-4 text-sm text-zinc-700 group-hover:text-zinc-900 transition-colors duration-300"
+                    >
+                      {content}
+                    </td>
+                  );
+                } catch (error) {
+                  console.error(`Error rendering column ${col.key}:`, error);
+                  return (
+                    <td
+                      key={col.key}
+                      className="px-6 py-4 text-sm text-red-500"
+                    >
+                      Error
+                    </td>
+                  );
+                }
+              })}
             </motion.tr>
           ))}
         </tbody>
