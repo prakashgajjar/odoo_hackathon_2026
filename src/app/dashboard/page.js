@@ -155,7 +155,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <ProtectedLayout requiredRoles={['manager', 'dispatcher', 'safety_officer']}>
+    <ProtectedLayout requiredRoles={['manager', 'dispatcher', 'safety_officer', 'driver']}>
       <motion.div
         variants={containerVariants}
         initial="hidden"

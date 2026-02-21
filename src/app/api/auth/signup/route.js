@@ -10,6 +10,8 @@ export async function POST(req) {
 
     const { email, password, name, role, phone } = await req.json();
 
+    console.log('Signup data:', { email, name, role, phone });
+
     if (!email || !password || !name) {
       return NextResponse.json(
         { message: 'Email, password, and name are required' },
@@ -34,6 +36,7 @@ export async function POST(req) {
       role: role || 'dispatcher',
       phone,
     });
+
 
     // Generate token
     const token = generateToken(user._id.toString(), user.role);

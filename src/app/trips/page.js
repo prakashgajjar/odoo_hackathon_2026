@@ -253,7 +253,7 @@ export default function TripDispatcherPage() {
   };
 
   return (
-    <ProtectedLayout requiredRoles={['dispatcher', 'manager']}>
+    <ProtectedLayout requiredRoles={['dispatcher', 'manager', 'driver']}>
       <motion.div
         variants={containerVariants}
         initial="hidden"

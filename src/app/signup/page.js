@@ -6,12 +6,14 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
 
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: '',
+    role: 'driver',
   });
 
   const handleChange = (e) => {
@@ -24,7 +26,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -38,7 +40,7 @@ export default function LoginPage() {
       }
 
       toast.success(data.message);
-      setFormData({ email: '', password: '' });
+      setFormData({ name: '', email: '', password: '', role: 'driver' });
 
       // Redirect to dashboard
       setTimeout(() => {
@@ -97,14 +99,28 @@ export default function LoginPage() {
             </motion.p>
           </div>
 
-          {/* Form Container */}
-          <form onSubmit={handleSubmit} className="p-8 space-y-4 md:space-y-5">
+          {/* Form Container with scrollable content */}
+          <form onSubmit={handleSubmit} className="p-8 space-y-4 md:space-y-5 max-h-[calc(95vh-200px)] overflow-y-auto">
             <motion.h2
               variants={itemVariants}
               className="text-2xl font-bold text-zinc-900 text-center mb-8"
             >
-              ✓ Welcome Back
+              + Create Account
             </motion.h2>
+
+            {/* Name Field */}
+            <motion.div variants={itemVariants}>
+              <label className="label font-bold text-zinc-800">Full Name</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="input-field bg-zinc-50 border-2 border-zinc-300 text-zinc-900 font-medium"
+                placeholder="John Doe"
+              />
+            </motion.div>
 
             {/* Email Field */}
             <motion.div variants={itemVariants}>
@@ -134,6 +150,50 @@ export default function LoginPage() {
               />
             </motion.div>
 
+            {/* Role Field */}
+            <motion.div variants={itemVariants} className="space-y-3">
+              <label className="label mb-2 font-bold text-zinc-800">Select Your Role</label>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { value: 'driver', label: '🚗 Driver', desc: 'Drive vehicles' },
+                  { value: 'dispatcher', label: '📞 Dispatcher', desc: 'Dispatch trips' },
+                  { value: 'manager', label: '👔 Manager', desc: 'Manage fleet' },
+                  { value: 'safety_officer', label: '🛡️ Safety', desc: 'Monitor safety' },
+                ].map((role) => (
+                  <motion.button
+                    key={role.value}
+                    type="button"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setFormData({ ...formData, role: role.value })}
+                    className={`p-3 rounded-lg border-2 transition-all duration-200 text-center font-semibold ${
+                      formData.role === role.value
+                        ? 'border-zinc-900 bg-zinc-900 text-white shadow-md'
+                        : 'border-zinc-300 bg-zinc-50 text-zinc-900 hover:border-zinc-500'
+                    }`}
+                  >
+                    <div className="text-base font-bold">{role.label}</div>
+                    <div className="text-xs opacity-80">{role.desc}</div>
+                  </motion.button>
+                ))}
+              </div>
+              {/* Financial Analyst - Full width */}
+              <motion.button
+                type="button"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setFormData({ ...formData, role: 'financial_analyst' })}
+                className={`w-full p-3 rounded-lg border-2 transition-all duration-200 text-center font-semibold ${
+                  formData.role === 'financial_analyst'
+                    ? 'border-zinc-900 bg-zinc-900 text-white shadow-md'
+                    : 'border-zinc-300 bg-zinc-50 text-zinc-900 hover:border-zinc-500'
+                }`}
+              >
+                <div className="text-base font-bold">💰 Financial Analyst</div>
+                <div className="text-xs opacity-80">Track expenses & ROI</div>
+              </motion.button>
+            </motion.div>
+
             {/* Submit Button */}
             <motion.button
               variants={itemVariants}
@@ -151,10 +211,10 @@ export default function LoginPage() {
                   >
                     ⏳
                   </motion.span>
-                  Logging in...
+                  Creating account...
                 </span>
               ) : (
-                '✓ Login'
+                '+ Create Account'
               )}
             </motion.button>
 
@@ -165,19 +225,19 @@ export default function LoginPage() {
               </div>
               <div className="relative flex justify-center text-xs">
                 <span className="px-3 bg-white text-zinc-500 font-medium uppercase tracking-wide">
-                  Don't have an account?
+                  Already have an account?
                 </span>
               </div>
             </motion.div>
 
-            {/* Sign Up Link */}
+            {/* Login Link */}
             <motion.div variants={itemVariants}>
-              <Link href="/signup">
+              <Link href="/login">
                 <button
                   type="button"
                   className="w-full btn-secondary text-lg font-semibold"
                 >
-                  + Create Account
+                  ✓ Login
                 </button>
               </Link>
             </motion.div>

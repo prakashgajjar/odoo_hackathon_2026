@@ -216,7 +216,7 @@ export default function DriversPage() {
   };
 
   return (
-    <ProtectedLayout requiredRoles={['safety_officer', 'dispatcher', 'manager']}>
+    <ProtectedLayout requiredRoles={['safety_officer', 'dispatcher', 'manager', 'driver']}>
       <motion.div
         variants={containerVariants}
         initial="hidden"
