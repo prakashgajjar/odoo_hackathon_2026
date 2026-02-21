@@ -1,28 +1,184 @@
 @import "tailwindcss";
-
-@layer components {
-  .input-style {
-    @apply w-full px-4 py-3 bg-zinc-800 border border-zinc-600 rounded-lg text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-zinc-700 transition-all duration-200;
+@layer base {
+  :root {
+    --color-primary: 24 24 27;
+    --color-secondary: 113 113 122;
+    --color-accent: 39 39 42;
+    --color-light: 245 245 245;
   }
 
-  .btn-style {
-    @apply w-full px-4 py-3 font-semibold rounded-lg transition-all duration-200 text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900;
+  * {
+    @apply transition-colors duration-300;
   }
 
-  .btn-style:disabled {
-    @apply opacity-50 cursor-not-allowed;
+  html {
+    scroll-behavior: smooth;
   }
 
-  .error-text {
-    @apply text-red-400 text-xs mt-1 font-medium;
+  body {
+    @apply bg-white text-zinc-900 font-sans antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+      'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   }
 
-  .warning-text {
-    @apply text-yellow-400 text-xs mt-1 font-medium;
+  h1 {
+    @apply text-4xl md:text-5xl font-bold text-zinc-900 tracking-tight;
   }
 
-  .success-text {
-    @apply text-green-400 text-xs mt-1 font-medium;
+  h2 {
+    @apply text-3xl md:text-4xl font-bold text-zinc-900;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl font-semibold text-zinc-900;
+  }
+
+  p {
+    @apply text-zinc-700 leading-relaxed;
+  }
+
+  input,
+  textarea,
+  select {
+    @apply w-full px-4 py-2.5 rounded-lg border border-zinc-200 bg-white text-zinc-900 
+           placeholder-zinc-500 focus:border-zinc-400 focus:outline-none focus:ring-2 
+           focus:ring-zinc-300 focus:ring-offset-0 transition-all duration-300;
+  }
+
+  button {
+    @apply transition-all duration-300 ease-in-out;
   }
 }
 
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg 
+           bg-zinc-900 text-white font-semibold hover:bg-zinc-800 
+           active:scale-95 transition-all duration-200 disabled:opacity-50 
+           disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg 
+           bg-zinc-100 text-zinc-900 font-semibold hover:bg-zinc-200 
+           active:scale-95 transition-all duration-200;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg 
+           text-zinc-700 font-semibold hover:bg-zinc-100 
+           active:scale-95 transition-all duration-200;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl border border-zinc-200 shadow-sm 
+           hover:shadow-md transition-all duration-300;
+  }
+
+  .card-elevated {
+    @apply bg-white rounded-2xl border border-zinc-100 shadow-lg 
+           hover:shadow-xl transition-all duration-300;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2.5 rounded-lg border border-zinc-200 
+           bg-white text-zinc-900 placeholder-zinc-400 
+           focus:border-zinc-400 focus:ring-2 focus:ring-zinc-200 
+           transition-all duration-300;
+  }
+
+  .label {
+    @apply block text-sm font-semibold text-zinc-900 mb-2;
+  }
+
+  .divider {
+    @apply h-px bg-gradient-to-r from-transparent via-zinc-200 to-transparent;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full 
+           text-xs font-semibold;
+  }
+
+  .badge-zinc {
+    @apply inline-flex items-center px-3 py-1 rounded-full 
+           text-xs font-semibold bg-zinc-100 text-zinc-700;
+  }
+
+  .badge-success {
+    @apply inline-flex items-center px-3 py-1 rounded-full 
+           text-xs font-semibold bg-zinc-50 text-zinc-900;
+  }
+
+  .badge-warning {
+    @apply inline-flex items-center px-3 py-1 rounded-full 
+           text-xs font-semibold bg-zinc-200 text-zinc-800;
+  }
+
+  .badge-error {
+    @apply inline-flex items-center px-3 py-1 rounded-full 
+           text-xs font-semibold bg-zinc-100 text-zinc-700;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-zinc-900 to-zinc-600 bg-clip-text text-transparent;
+  }
+
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-md border border-zinc-200/50;
+  }
+
+  .shadow-soft {
+    @apply shadow-lg shadow-zinc-900/5;
+  }
+
+  .shadow-subtle {
+    @apply shadow-md shadow-zinc-900/3;
+  }
+}
+
+@layer utilities {
+  .transition-smooth {
+    @apply transition-all duration-300 ease-in-out;
+  }
+
+  .hover-lift {
+    @apply hover:-translate-y-1 hover:shadow-lg transition-all duration-300;
+  }
+
+  .active-press {
+    @apply active:scale-95 transition-transform duration-150;
+  }
+
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-zinc-300 focus:ring-offset-2;
+  }
+
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .grid-responsive {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  }
+
+  .text-truncate-multi {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  @apply w-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-zinc-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-zinc-300 rounded-full hover:bg-zinc-400;
+}
