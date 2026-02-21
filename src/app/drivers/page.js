@@ -130,6 +130,12 @@ export default function DriversPage() {
     return new Date(expiryDate) < new Date();
   };
 
+  // Get current user info (assume available via /api/auth/me)
+  const [currentUser, setCurrentUser] = useState(null);
+  useEffect(() => {
+    fetch('/api/auth/me').then(res => res.json()).then(data => setCurrentUser(data.user)).catch(() => {});
+  }, []);
+
   const driverColumns = [
     { key: 'name', label: 'Name' },
     { key: 'email', label: 'Email' },
@@ -163,17 +169,32 @@ export default function DriversPage() {
     {
       key: 'actions',
       label: 'Actions',
-      render: (_, row) => (
-        <select
-          value={row.status}
-          onChange={(e) => handleStatusChange(row._id, e.target.value)}
-          className="input-field w-32 text-sm"
-        >
-          <option value="on_duty">On Duty</option>
-          <option value="off_duty">Off Duty</option>
-          <option value="suspended">Suspended</option>
-        </select>
-      ),
+      render: (_, row) => {
+        // Only allow status change if:
+        // - current user is manager/dispatcher
+        // - OR current user is driver and this is their own row (and only on_duty/off_duty)
+        if (!currentUser) return null;
+        const canEdit = ['manager', 'dispatcher'].includes(currentUser.role) ||
+          (currentUser.role === 'driver' && currentUser._id === row._id);
+        if (!canEdit) return null;
+        const isDriverSelf = currentUser.role === 'driver' && currentUser._id === row._id;
+        return (
+          <select
+            value={row.status}
+            onChange={(e) => {
+              let value = e.target.value;
+              // Drivers can only set on_duty/off_duty
+              if (isDriverSelf && !['on_duty', 'off_duty'].includes(value)) return;
+              handleStatusChange(row._id, value);
+            }}
+            className="input-field w-32 text-sm"
+          >
+            <option value="on_duty">On Duty</option>
+            <option value="off_duty">Off Duty</option>
+            {(['manager', 'dispatcher'].includes(currentUser.role)) && <option value="suspended">Suspended</option>}
+          </select>
+        );
+      },
     },
   ];
 

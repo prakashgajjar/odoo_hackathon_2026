@@ -47,6 +47,8 @@ export async function POST(req) {
     await connectDB();
 
     const body = await req.json();
+    // Prevent tripNumber from being set by frontend
+    if ('tripNumber' in body) delete body.tripNumber;
     const { vehicleId, driverId, cargoWeight } = body;
 
     // Validate vehicle exists and is available
@@ -97,8 +99,8 @@ export async function POST(req) {
       );
     }
 
-    // Create trip with compliance checks
-    const trip = await Trip.create({
+    // Create trip with compliance checks (use save to trigger pre-save hook)
+    const trip = new Trip({
       ...body,
       status: 'draft',
       complianceCheck: {
@@ -107,6 +109,7 @@ export async function POST(req) {
         vehicleInService: vehicle.status === 'available',
       },
     });
+    await trip.save();
 
     return NextResponse.json(
       { message: 'Trip created', trip },

@@ -61,13 +61,13 @@ export default function TripDispatcherPage() {
       const tripsData = await tripsRes.json();
       setTrips(tripsData.trips || []);
 
-      // Fetch available vehicles
-      const vehiclesRes = await fetch('/api/vehicles?status=available');
+      // Fetch all vehicles
+      const vehiclesRes = await fetch('/api/vehicles');
       const vehiclesData = await vehiclesRes.json();
       setVehicles(vehiclesData.vehicles || []);
 
-      // Fetch available drivers
-      const driversRes = await fetch('/api/drivers?status=on_duty');
+      // Fetch all drivers
+      const driversRes = await fetch('/api/drivers');
       const driversData = await driversRes.json();
       setDrivers(driversData.drivers || []);
     } catch (error) {
