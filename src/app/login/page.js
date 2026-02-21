@@ -66,10 +66,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-900 via-white to-zinc-50 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen w-full bg-gradient-to-br from-zinc-900 via-zinc-300 to-zinc-50 flex items-center justify-center px-4 py-12">
       {/* Background animation elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-zinc-200 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
-      <div className="absolute -bottom-8 left-20 w-96 h-96 bg-zinc-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
+      <div className="fixed top-0 right-0 w-96 h-96 bg-zinc-200 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob pointer-events-none"></div>
+      <div className="fixed -bottom-8 left-20 w-96 h-96 bg-zinc-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000 pointer-events-none"></div>
 
       <motion.div
         variants={containerVariants}
@@ -80,7 +80,7 @@ export default function LoginPage() {
         {/* Card */}
         <motion.div variants={itemVariants} className="card bg-white shadow-2xl overflow-hidden">
           {/* Header with gradient */}
-          <div className="bg-gradient-to-r from-zinc-900 to-zinc-800 text-white p-8 text-center">
+          <div className="bg-gradient-to-r from-zinc-800 to-zinc-700 text-white p-8 text-center">
             <motion.h1
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -141,7 +141,7 @@ export default function LoginPage() {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={loading}
-              className="w-full btn-primary disabled:opacity-50 mt-8 text-lg font-semibold"
+              className="w-full btn-primary bg-zinc-800  disabled:opacity-50 mt-8 text-lg font-semibold"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">

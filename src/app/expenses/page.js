@@ -134,7 +134,7 @@ export default function FuelExpensesPage() {
 
   if (loading) {
     return (
-      <ProtectedLayout requiredRoles={['financial_analyst', 'manager']}>
+      <ProtectedLayout requiredRoles={['financial_analyst', 'manager', 'dispatcher']}>
         <div className="flex items-center justify-center min-h-[50vh]">
           <motion.div
             className="text-center"
@@ -175,7 +175,7 @@ export default function FuelExpensesPage() {
   const avgCostPerLiter = totalLiters > 0 ? (totalFuelCost / totalLiters).toFixed(2) : 0;
 
   return (
-    <ProtectedLayout requiredRoles={['financial_analyst', 'manager']}>
+    <ProtectedLayout requiredRoles={['financial_analyst', 'manager', 'dispatcher']}>
       <motion.div
         variants={containerVariants}
         initial="hidden"

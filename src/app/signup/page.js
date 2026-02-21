@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import toast from 'react-hot-toast';
-import { motion } from 'framer-motion';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 export default function SignupPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    role: 'driver',
+    name: "",
+    email: "",
+    password: "",
+    role: "driver",
   });
 
   const handleChange = (e) => {
@@ -26,29 +26,29 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.message || 'Error occurred');
+        toast.error(data.message || "Error occurred");
         return;
       }
 
       toast.success(data.message);
-      setFormData({ name: '', email: '', password: '', role: 'driver' });
+      setFormData({ name: "", email: "", password: "", role: "driver" });
 
       // Redirect to dashboard
       setTimeout(() => {
-        router.push('/dashboard');
+        router.push("/dashboard");
       }, 1000);
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Something went wrong');
+      console.error("Error:", error);
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -68,10 +68,10 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-900 via-white to-zinc-50 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen w-full bg-gradient-to-br from-zinc-900 via-white to-zinc-50 flex items-center justify-center px-4 py-8">
       {/* Background animation elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-zinc-200 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
-      <div className="absolute -bottom-8 left-20 w-96 h-96 bg-zinc-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
+      <div className="fixed top-0 right-0 w-96 h-96 bg-zinc-200 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob pointer-events-none"></div>
+      <div className="fixed -bottom-8 left-20 w-96 h-96 bg-zinc-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000 pointer-events-none"></div>
 
       <motion.div
         variants={containerVariants}
@@ -80,13 +80,16 @@ export default function SignupPage() {
         className="relative z-10 w-full max-w-lg"
       >
         {/* Card */}
-        <motion.div variants={itemVariants} className="card bg-white shadow-2xl overflow-hidden">
+        <motion.div
+          variants={itemVariants}
+          className="card bg-white shadow-2xl overflow-hidden"
+        >
           {/* Header with gradient */}
           <div className="bg-gradient-to-r from-zinc-900 to-zinc-800 text-white p-8 text-center">
             <motion.h1
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.3, type: 'spring', stiffness: 100 }}
+              transition={{ delay: 0.3, type: "spring", stiffness: 100 }}
               className="text-4xl font-bold tracking-tight text-zinc-100"
             >
               FleetFlow
@@ -100,7 +103,10 @@ export default function SignupPage() {
           </div>
 
           {/* Form Container with scrollable content */}
-          <form onSubmit={handleSubmit} className="p-8 space-y-4 md:space-y-5 max-h-[calc(95vh-200px)] overflow-y-auto">
+          <form
+            onSubmit={handleSubmit}
+            className="p-8 space-y-4 md:space-y-5  overflow-y-auto"
+          >
             <motion.h2
               variants={itemVariants}
               className="text-2xl font-bold text-zinc-900 text-center mb-8"
@@ -124,7 +130,9 @@ export default function SignupPage() {
 
             {/* Email Field */}
             <motion.div variants={itemVariants}>
-              <label className="label font-bold text-zinc-800">Email Address</label>
+              <label className="label font-bold text-zinc-800">
+                Email Address
+              </label>
               <input
                 type="email"
                 name="email"
@@ -151,47 +159,74 @@ export default function SignupPage() {
             </motion.div>
 
             {/* Role Field */}
-            <motion.div variants={itemVariants} className="space-y-3">
-              <label className="label mb-2 font-bold text-zinc-800">Select Your Role</label>
-              <div className="grid grid-cols-2 gap-2">
+            <motion.div variants={itemVariants} className="space-y-4">
+              <label className="block text-sm font-semibold text-zinc-700">
+                Select Your Role
+              </label>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
-                  { value: 'driver', label: '🚗 Driver', desc: 'Drive vehicles' },
-                  { value: 'dispatcher', label: '📞 Dispatcher', desc: 'Dispatch trips' },
-                  { value: 'manager', label: '👔 Manager', desc: 'Manage fleet' },
-                  { value: 'safety_officer', label: '🛡️ Safety', desc: 'Monitor safety' },
-                ].map((role) => (
-                  <motion.button
-                    key={role.value}
-                    type="button"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setFormData({ ...formData, role: role.value })}
-                    className={`p-3 rounded-lg border-2 transition-all duration-200 text-center font-semibold ${
-                      formData.role === role.value
-                        ? 'border-zinc-900 bg-zinc-900 text-white shadow-md'
-                        : 'border-zinc-300 bg-zinc-50 text-zinc-900 hover:border-zinc-500'
-                    }`}
-                  >
-                    <div className="text-base font-bold">{role.label}</div>
-                    <div className="text-xs opacity-80">{role.desc}</div>
-                  </motion.button>
-                ))}
+                  {
+                    value: "driver",
+                    title: "Driver",
+                    desc: "Operate assigned vehicles",
+                  },
+                  {
+                    value: "dispatcher",
+                    title: "Dispatcher",
+                    desc: "Assign and monitor trips",
+                  },
+                  {
+                    value: "manager",
+                    title: "Manager",
+                    desc: "Oversee fleet operations",
+                  },
+                  {
+                    value: "safety_officer",
+                    title: "Safety Officer",
+                    desc: "Ensure compliance & safety",
+                  },
+                  {
+                    value: "financial_analyst",
+                    title: "Financial Analyst",
+                    desc: "Track revenue & expenses",
+                  },
+                ].map((role) => {
+                  const active = formData.role === role.value;
+
+                  return (
+                    <motion.button
+                      key={role.value}
+                      type="button"
+                      whileHover={{ y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() =>
+                        setFormData((prev) => ({ ...prev, role: role.value }))
+                      }
+                      className={`
+            p-4 rounded-xl border text-left transition-all duration-200
+            ${
+              active
+                ? "border-indigo-600 bg-indigo-50 shadow-sm"
+                : "border-zinc-200 bg-white hover:border-indigo-400 hover:bg-indigo-50/40"
+            }
+          `}
+                    >
+                      <div
+                        className={`text-sm font-semibold ${
+                          active ? "text-indigo-700" : "text-zinc-800"
+                        }`}
+                      >
+                        {role.title}
+                      </div>
+
+                      <div className="text-xs text-zinc-500 mt-1">
+                        {role.desc}
+                      </div>
+                    </motion.button>
+                  );
+                })}
               </div>
-              {/* Financial Analyst - Full width */}
-              <motion.button
-                type="button"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setFormData({ ...formData, role: 'financial_analyst' })}
-                className={`w-full p-3 rounded-lg border-2 transition-all duration-200 text-center font-semibold ${
-                  formData.role === 'financial_analyst'
-                    ? 'border-zinc-900 bg-zinc-900 text-white shadow-md'
-                    : 'border-zinc-300 bg-zinc-50 text-zinc-900 hover:border-zinc-500'
-                }`}
-              >
-                <div className="text-base font-bold">💰 Financial Analyst</div>
-                <div className="text-xs opacity-80">Track expenses & ROI</div>
-              </motion.button>
             </motion.div>
 
             {/* Submit Button */}
@@ -207,14 +242,18 @@ export default function SignupPage() {
                 <span className="flex items-center justify-center gap-2">
                   <motion.span
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
                   >
                     ⏳
                   </motion.span>
                   Creating account...
                 </span>
               ) : (
-                '+ Create Account'
+                "+ Create Account"
               )}
             </motion.button>
 
