@@ -7,6 +7,16 @@ import { StatusBadge } from '@/components/StatusBadge';
 import { FormModal } from '@/components/FormModal';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
+import {
+  Plane,
+  CheckCircle,
+  Play,
+  X,
+  MapPin,
+  Search,
+  Plus,
+  Clock,
+} from 'lucide-react';
 
 export default function TripDispatcherPage() {
   const [trips, setTrips] = useState([]);
@@ -16,6 +26,9 @@ export default function TripDispatcherPage() {
   const [showModal, setShowModal] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
   const [filterStatus, setFilterStatus] = useState('');
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [cancelTrip, setCancelTrip] = useState(null);
+  const [cancelReason, setCancelReason] = useState('');
 
   const tripFields = [
     {
@@ -128,10 +141,30 @@ export default function TripDispatcherPage() {
         throw new Error(error.message);
       }
 
-      toast.success('Trip dispatched');
+      toast.success('Trip dispatched successfully');
       fetchData();
     } catch (error) {
       toast.error(error.message || 'Failed to dispatch trip');
+    }
+  };
+
+  const handleStartTrip = async (id) => {
+    try {
+      const res = await fetch(`/api/trips/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'in_progress' }),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+      }
+
+      toast.success('Trip started');
+      fetchData();
+    } catch (error) {
+      toast.error(error.message || 'Failed to start trip');
     }
   };
 
@@ -154,10 +187,38 @@ export default function TripDispatcherPage() {
         throw new Error(error.message);
       }
 
-      toast.success('Trip completed');
+      toast.success('Trip completed successfully');
       fetchData();
     } catch (error) {
       toast.error(error.message || 'Failed to complete trip');
+    }
+  };
+
+  const handleCancelTrip = async () => {
+    try {
+      if (!cancelTrip) return;
+
+      const res = await fetch(`/api/trips/${cancelTrip._id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          status: 'cancelled',
+          cancelReason: cancelReason || '',
+        }),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+      }
+
+      toast.success('Trip cancelled');
+      setShowCancelModal(false);
+      setCancelTrip(null);
+      setCancelReason('');
+      fetchData();
+    } catch (error) {
+      toast.error(error.message || 'Failed to cancel trip');
     }
   };
 
@@ -185,29 +246,93 @@ export default function TripDispatcherPage() {
       key: 'actions',
       label: 'Actions',
       render: (_, row) => (
-        <div className="flex gap-3">
+        <div className="flex gap-2 flex-wrap">
           {row.status === 'draft' && (
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => handleDispatchTrip(row._id)}
-              className="text-blue-600 hover:text-blue-800 font-semibold text-sm"
-            >
-              ✈️ Dispatch
-            </motion.button>
+            <>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleDispatchTrip(row._id)}
+                className="flex items-center gap-1 px-3 py-1 text-white bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-semibold"
+              >
+                <Plane className="w-4 h-4" /> Dispatch
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  setCancelTrip(row);
+                  setShowCancelModal(true);
+                }}
+                className="flex items-center gap-1 px-3 py-1 text-white bg-red-600 hover:bg-red-700 rounded-lg text-sm font-semibold"
+              >
+                <X className="w-4 h-4" /> Cancel
+              </motion.button>
+            </>
           )}
           {row.status === 'dispatched' && (
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => handleCompleteTrip(row._id)}
-              className="text-emerald-600 hover:text-emerald-800 font-semibold text-sm"
-            >
-              ✓ Complete
-            </motion.button>
+            <>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleStartTrip(row._id)}
+                className="flex items-center gap-1 px-3 py-1 text-white bg-amber-600 hover:bg-amber-700 rounded-lg text-sm font-semibold"
+              >
+                <Play className="w-4 h-4" /> Start
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleCompleteTrip(row._id)}
+                className="flex items-center gap-1 px-3 py-1 text-white bg-green-600 hover:bg-green-700 rounded-lg text-sm font-semibold"
+              >
+                <CheckCircle className="w-4 h-4" /> Complete
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  setCancelTrip(row);
+                  setShowCancelModal(true);
+                }}
+                className="flex items-center gap-1 px-3 py-1 text-white bg-red-600 hover:bg-red-700 rounded-lg text-sm font-semibold"
+              >
+                <X className="w-4 h-4" /> Cancel
+              </motion.button>
+            </>
+          )}
+          {row.status === 'in_progress' && (
+            <>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleCompleteTrip(row._id)}
+                className="flex items-center gap-1 px-3 py-1 text-white bg-green-600 hover:bg-green-700 rounded-lg text-sm font-semibold"
+              >
+                <CheckCircle className="w-4 h-4" /> Complete
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  setCancelTrip(row);
+                  setShowCancelModal(true);
+                }}
+                className="flex items-center gap-1 px-3 py-1 text-white bg-red-600 hover:bg-red-700 rounded-lg text-sm font-semibold"
+              >
+                <X className="w-4 h-4" /> Cancel
+              </motion.button>
+            </>
           )}
           {row.status === 'completed' && (
-            <span className="text-emerald-600 font-semibold text-sm">✓ Done</span>
+            <span className="inline-flex items-center gap-1 px-3 py-1 text-green-700 bg-green-100 rounded-lg text-sm font-semibold">
+              <CheckCircle className="w-4 h-4" /> Done
+            </span>
+          )}
+          {row.status === 'cancelled' && (
+            <span className="inline-flex items-center gap-1 px-3 py-1 text-red-700 bg-red-100 rounded-lg text-sm font-semibold">
+              <X className="w-4 h-4" /> Cancelled
+            </span>
           )}
         </div>
       ),
@@ -266,8 +391,8 @@ export default function TripDispatcherPage() {
           className="flex flex-col md:flex-row md:justify-between md:items-center gap-4"
         >
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold text-zinc-900">
-              ✈️ Trip Dispatcher
+            <h1 className="text-4xl md:text-5xl font-bold text-zinc-900 flex items-center gap-3">
+              <Plane className="w-10 h-10 text-blue-600" /> Trip Dispatcher
             </h1>
             <p className="text-zinc-500 mt-2">Manage & dispatch fleet trips</p>
           </div>
@@ -275,15 +400,17 @@ export default function TripDispatcherPage() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowModal(true)}
-            className="btn-primary self-start md:self-auto px-6 py-3 font-semibold"
+            className="btn-primary self-start md:self-auto px-6 py-3 font-semibold flex items-center gap-2"
           >
-            + Create Trip
+            <Plus className="w-5 h-5" /> Create Trip
           </motion.button>
         </motion.div>
 
         {/* Status Filter */}
         <motion.div variants={itemVariants} className="card p-6">
-          <label className="label">🔍 Filter by Status</label>
+          <label className="label flex items-center gap-2">
+            <Search className="w-5 h-5 text-zinc-600" /> Filter by Status
+          </label>
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
@@ -292,6 +419,7 @@ export default function TripDispatcherPage() {
             <option value="">All Trips</option>
             <option value="draft">Draft</option>
             <option value="dispatched">Dispatched</option>
+            <option value="in_progress">In Progress</option>
             <option value="completed">Completed</option>
             <option value="cancelled">Cancelled</option>
           </select>
@@ -300,7 +428,7 @@ export default function TripDispatcherPage() {
         {/* Trips Table */}
         <motion.div variants={itemVariants} className="card p-6">
           <h2 className="text-xl font-bold text-zinc-900 mb-6 flex items-center gap-2">
-            📋 All Trips
+            <MapPin className="w-6 h-6 text-blue-600" /> All Trips
             <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-zinc-100 text-sm font-semibold text-zinc-700">
               {trips.length}
             </span>
@@ -315,6 +443,61 @@ export default function TripDispatcherPage() {
             onSubmit={handleCreateTrip}
             onClose={() => setShowModal(false)}
           />
+        )}
+
+        {/* Cancel Trip Modal */}
+        {showCancelModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6"
+            >
+              <h2 className="text-2xl font-bold text-zinc-900 mb-4 flex items-center gap-2">
+                <X className="w-6 h-6 text-red-600" /> Cancel Trip
+              </h2>
+              <p className="text-zinc-600 mb-4">
+                Trip: <span className="font-semibold text-zinc-900">{cancelTrip?.tripNumber}</span>
+              </p>
+              
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-zinc-700 mb-2">
+                  Reason (optional)
+                </label>
+                <textarea
+                  value={cancelReason}
+                  onChange={(e) => setCancelReason(e.target.value)}
+                  placeholder="Enter reason for cancellation..."
+                  className="w-full p-3 border border-zinc-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows="3"
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    setShowCancelModal(false);
+                    setCancelTrip(null);
+                    setCancelReason('');
+                  }}
+                  className="flex-1 px-4 py-2 text-zinc-900 border border-zinc-300 rounded-lg hover:bg-zinc-100 font-semibold transition"
+                >
+                  Keep Trip
+                </button>
+                <button
+                  onClick={handleCancelTrip}
+                  className="flex-1 px-4 py-2 text-white bg-red-600 hover:bg-red-700 rounded-lg font-semibold transition"
+                >
+                  Confirm Cancel
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
       </motion.div>
     </ProtectedLayout>
