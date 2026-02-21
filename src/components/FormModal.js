@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
+import { X, Check, Loader } from 'lucide-react';
 
 export function FormModal({ title, fields, onSubmit, onClose, loading = false }) {
   const [formData, setFormData] = useState({});
@@ -45,9 +46,9 @@ export function FormModal({ title, fields, onSubmit, onClose, loading = false })
             <h2 className="text-xl font-bold text-zinc-900">{title}</h2>
             <button
               onClick={onClose}
-              className="text-zinc-400 hover:text-zinc-600 transition-colors duration-300 text-2xl"
+              className="text-zinc-400 hover:text-zinc-600 transition-colors duration-300"
             >
-              ✕
+              <X className="w-6 h-6" />
             </button>
           </div>
 
@@ -108,9 +109,19 @@ export function FormModal({ title, fields, onSubmit, onClose, loading = false })
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={isSubmitting || loading}
-                className="flex-1 btn-primary disabled:opacity-50"
+                className="flex-1 btn-primary disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {isSubmitting ? '⏳ Submitting...' : '✓ Submit'}
+                {isSubmitting ? (
+                  <>
+                    <Loader className="w-4 h-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    <Check className="w-4 h-4" />
+                    Submit
+                  </>
+                )}
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.02 }}

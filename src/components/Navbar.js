@@ -7,6 +7,9 @@ import {
   LineChart,
   Map,
   Fuel,
+  Menu,
+  X,
+  Zap,
 } from 'lucide-react';
 
 import Link from 'next/link';
@@ -71,7 +74,7 @@ export function Navbar({ user }) {
           >
             <Link href="/dashboard" className="flex items-center gap-2 group">
               <div className="w-10 h-10 bg-zinc-900 rounded-xl flex items-center justify-center text-white font-bold text-lg group-hover:bg-zinc-800 transition-colors duration-300">
-                ⚡
+                <Zap className="w-6 h-6 text-yellow-400" />
               </div>
               <div className="hidden sm:flex flex-col">
                 <span className="text-lg font-bold text-zinc-900">FleetFlow</span>
@@ -128,7 +131,7 @@ export function Navbar({ user }) {
               onClick={() => setIsOpen(!isOpen)}
               className="lg:hidden p-2 rounded-lg hover:bg-zinc-100 transition-colors"
             >
-              {isOpen ? '✕' : '☰'}
+              {isOpen ? <X className="w-6 h-6 text-zinc-700" /> : <Menu className="w-6 h-6 text-zinc-700" />}
             </button>
           </div>
         </div>

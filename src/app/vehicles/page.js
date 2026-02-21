@@ -7,6 +7,7 @@ import { StatusBadge } from '@/components/StatusBadge';
 import { FormModal } from '@/components/FormModal';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
+import { Car, Plus, Edit2, Trash2, ClipboardList } from 'lucide-react';
 
 export default function VehicleRegistryPage() {
   const [vehicles, setVehicles] = useState([]);
@@ -156,17 +157,17 @@ export default function VehicleRegistryPage() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => handleEditClick(row)}
-            className="text-zinc-600 hover:text-zinc-900 font-semibold text-sm transition-colors"
+            className="flex items-center gap-1 text-zinc-600 hover:text-zinc-900 font-semibold text-sm transition-colors"
           >
-            ✏️ Edit
+            <Edit2 className="w-4 h-4" /> Edit
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => handleDeleteVehicle(row._id)}
-            className="text-red-600 hover:text-red-800 font-semibold text-sm transition-colors"
+            className="flex items-center gap-1 text-red-600 hover:text-red-800 font-semibold text-sm transition-colors"
           >
-            🗑️ Delete
+            <Trash2 className="w-4 h-4" /> Delete
           </motion.button>
         </div>
       ),
@@ -225,8 +226,8 @@ export default function VehicleRegistryPage() {
           className="flex flex-col md:flex-row md:justify-between md:items-center gap-4"
         >
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold text-zinc-900">
-              🚗 Vehicle Registry
+            <h1 className="text-4xl md:text-5xl font-bold text-zinc-900 flex items-center gap-3">
+              <Car className="w-10 h-10 text-blue-600" /> Vehicle Registry
             </h1>
             <p className="text-zinc-500 mt-2">Manage your fleet inventory</p>
           </div>
@@ -239,14 +240,14 @@ export default function VehicleRegistryPage() {
             }}
             className="btn-primary self-start md:self-auto px-6 py-3 font-semibold inline-flex items-center gap-2"
           >
-            + Add Vehicle
+            <Plus className="w-5 h-5" /> Add Vehicle
           </motion.button>
         </motion.div>
 
         {/* Table Card */}
         <motion.div variants={itemVariants} className="card p-6">
           <h2 className="text-xl font-bold text-zinc-900 mb-6 flex items-center gap-2">
-            📋 All Vehicles
+            <ClipboardList className="w-6 h-6 text-blue-600" /> All Vehicles
             <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-zinc-100 text-sm font-semibold text-zinc-700">
               {vehicles.length}
             </span>
@@ -256,7 +257,7 @@ export default function VehicleRegistryPage() {
 
         {showModal && (
           <FormModal
-            title={editingId ? '✏️ Edit Vehicle' : '+ Add New Vehicle'}
+            title={editingId ? 'Edit Vehicle' : '+ Add New Vehicle'}
             fields={vehicleFields}
             onSubmit={editingId ? handleUpdateVehicle : handleAddVehicle}
             onClose={() => {

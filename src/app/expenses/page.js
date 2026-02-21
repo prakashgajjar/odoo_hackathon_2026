@@ -6,6 +6,7 @@ import { DataTable } from '@/components/DataTable';
 import { FormModal } from '@/components/FormModal';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
+import { Plus, BarChart3, DollarSign } from 'lucide-react';
 
 export default function FuelExpensesPage() {
   const [expenses, setExpenses] = useState([]);
@@ -188,8 +189,9 @@ export default function FuelExpensesPage() {
           className="flex flex-col md:flex-row md:justify-between md:items-center gap-4"
         >
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold text-zinc-900">
-              💰 Fuel & Expenses
+            <h1 className="text-4xl md:text-5xl font-bold text-zinc-900 flex items-center gap-3">
+              <DollarSign className="w-10 h-10 text-green-600" />
+              Fuel & Expenses
             </h1>
             <p className="text-zinc-500 mt-2">Track operational fuel costs</p>
           </div>
@@ -246,8 +248,9 @@ export default function FuelExpensesPage() {
             whileHover={{ translateY: -4 }}
             className="card p-6 shadow-md"
           >
-            <p className="text-zinc-600 text-sm font-semibold uppercase tracking-wide">
-              📊 Avg/Liter
+            <p className="text-zinc-600 text-sm font-semibold uppercase tracking-wide flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-blue-600" />
+              Avg/Liter
             </p>
             <motion.p
               initial={{ scale: 0.8, opacity: 0 }}
@@ -290,7 +293,7 @@ export default function FuelExpensesPage() {
 
         {showModal && (
           <FormModal
-            title="💰 Record Fuel Expense"
+            title="Record Fuel Expense"
             fields={expenseFields}
             onSubmit={handleAddExpense}
             onClose={() => setShowModal(false)}
