@@ -323,21 +323,21 @@ export default function AnalyticsPage() {
         >
           {/* Fleet Summary */}
           <motion.div className="card p-6">
-            <h3 className="font-bold text-zinc-900 mb-6 flex items-center gap-2">
+            <h3 className="font-bold text-zinc-900 text-2xl mb-6 flex items-center gap-2">
               <Car className="w-5 h-5 text-blue-600" /> Fleet Summary
             </h3>
             <ul className="space-y-4">
-              <li className="flex justify-between items-center">
+              <li className="flex justify-between  items-center">
                 <span className="text-zinc-600 font-medium">Total Vehicles</span>
-                <span className="text-2xl font-bold text-zinc-900">{vehicles.length}</span>
+                <span className="text-lg font-bold text-zinc-900">{vehicles.length}</span>
               </li>
               <li className="flex justify-between items-center border-t border-zinc-200 pt-4">
                 <span className="text-zinc-600 font-medium">Total Trips</span>
-                <span className="text-2xl font-bold text-zinc-900">{trips.length}</span>
+                <span className="text-lg font-bold text-zinc-900">{trips.length}</span>
               </li>
               <li className="flex justify-between items-center border-t border-zinc-200 pt-4">
                 <span className="text-zinc-600 font-medium">Completed</span>
-                <span className="text-2xl font-bold text-emerald-600">{trips.filter(t => t.status === 'completed').length}</span>
+                <span className="text-lg font-bold text-emerald-600">{trips.filter(t => t.status === 'completed').length}</span>
               </li>
               <li className="flex justify-between items-center border-t border-zinc-200 pt-4">
                 <span className="text-zinc-600 font-medium">Avg Mileage</span>
@@ -350,21 +350,21 @@ export default function AnalyticsPage() {
 
           {/* Expense Breakdown */}
           <motion.div className="card p-6">
-            <h3 className="font-bold text-zinc-900 mb-6 flex items-center gap-2">
+            <h3 className="font-bold text-zinc-900 mb-6 flex text-2xl items-center gap-2">
               <DollarSign className="w-5 h-5 text-green-600" /> Expense Breakdown
             </h3>
             <ul className="space-y-4">
               <li className="flex justify-between items-center">
                 <span className="text-zinc-600 font-medium">Fuel Cost</span>
-                <span className="text-xl font-bold text-zinc-900">${analytics.totalFuelCost.toLocaleString('en', { maximumFractionDigits: 0 })}</span>
+                <span className="text-lg font-bold text-zinc-900">${analytics.totalFuelCost.toLocaleString('en', { maximumFractionDigits: 0 })}</span>
               </li>
               <li className="flex justify-between items-center border-t border-zinc-200 pt-4">
                 <span className="text-zinc-600 font-medium">Maintenance</span>
-                <span className="text-xl font-bold text-zinc-900">${analytics.totalMaintenanceCost.toLocaleString('en', { maximumFractionDigits: 0 })}</span>
+                <span className="text-lg font-bold text-zinc-900">${analytics.totalMaintenanceCost.toLocaleString('en', { maximumFractionDigits: 0 })}</span>
               </li>
               <li className="flex justify-between items-center border-t border-zinc-200 pt-4">
                 <span className="text-zinc-600 font-medium">Total Operational</span>
-                <span className="text-xl font-bold text-zinc-900">${analytics.operationalCost.toLocaleString('en', { maximumFractionDigits: 0 })}</span>
+                <span className="text-lg font-bold text-zinc-900">${analytics.operationalCost.toLocaleString('en', { maximumFractionDigits: 0 })}</span>
               </li>
               <li className="flex justify-between items-center border-t border-zinc-200 pt-4">
                 <span className="text-zinc-600 font-medium">Per Trip Cost</span>
@@ -375,13 +375,13 @@ export default function AnalyticsPage() {
 
           {/* Key Metrics */}
           <motion.div className="card p-6">
-            <h3 className="font-bold text-zinc-900 mb-6 flex items-center gap-2">
+            <h3 className="font-bold text-zinc-900 mb-6 text-2xl flex items-center gap-2">
               <Gauge className="w-5 h-5 text-purple-600" /> Key Metrics
             </h3>
             <ul className="space-y-4">
               <li className="flex justify-between items-center">
                 <span className="text-zinc-600 font-medium">Total Fuel (L)</span>
-                <span className="text-2xl font-bold text-zinc-900">{expenses.reduce((sum, e) => sum + (e.liters || 0), 0).toLocaleString('en', { maximumFractionDigits: 0 })}</span>
+                <span className="text-lg font-bold text-zinc-900">{expenses.reduce((sum, e) => sum + (e.liters || 0), 0).toLocaleString('en', { maximumFractionDigits: 0 })}</span>
               </li>
               <li className="flex justify-between items-center border-t border-zinc-200 pt-4">
                 <span className="text-zinc-600 font-medium">Cost per Liter</span>
@@ -391,7 +391,7 @@ export default function AnalyticsPage() {
               </li>
               <li className="flex justify-between items-center border-t border-zinc-200 pt-4">
                 <span className="text-zinc-600 font-medium">Avg Efficiency</span>
-                <span className="text-2xl font-bold text-zinc-900">{analytics.avgFuelEfficiency} km/L</span>
+                <span className="text-lg font-bold text-zinc-900">{analytics.avgFuelEfficiency} km/L</span>
               </li>
             </ul>
           </motion.div>

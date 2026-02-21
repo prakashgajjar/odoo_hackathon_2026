@@ -23,7 +23,7 @@ export function KPICard({ title, value, icon, trend, color = 'zinc' }) {
             <p className="text-zinc-600 text-sm font-medium uppercase tracking-wide">
               {title}
             </p>
-            <p className="text-4xl md:text-5xl font-bold text-zinc-900 mt-2">
+            <p className="text-xl md:text-2xl font-bold text-zinc-900 mt-2">
               {value}
             </p>
             {trend && (

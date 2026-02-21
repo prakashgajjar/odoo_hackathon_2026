@@ -6,6 +6,7 @@ import { getUserFromCookie } from '@/lib/clientAuth';
 // GET single driver
 export async function GET(req, { params }) {
   try {
+    const { id } = await params;
     const user = await getUserFromCookie();
     if (!user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -13,7 +14,7 @@ export async function GET(req, { params }) {
 
     await connectDB();
 
-    const driver = await Driver.findById(params.id);
+    const driver = await Driver.findById(id);
     if (!driver) {
       return NextResponse.json(
         { message: 'Driver not found' },
@@ -34,6 +35,7 @@ export async function GET(req, { params }) {
 // UPDATE driver
 export async function PUT(req, { params }) {
   try {
+    const { id } = await params;
     const user = await getUserFromCookie();
     if (!user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -44,23 +46,22 @@ export async function PUT(req, { params }) {
     const body = await req.json();
     
     let updateFields = body;
-    console.log(body);
 
     // Only allow drivers to update their own status (on_duty/off_duty)
     if (user.role === 'driver') {
-      if (user._id !== params.id) {
+      if (user._id !== id) {
         return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
       }
       // Only allow status change, and only to on_duty/off_duty
       if (!['on_duty', 'off_duty'].includes(body.status)) {
-        return NextResponse.json({ message: 'Invalid status' }, { status: 400 });
+        return NextResponse.json({ message: 'Invalid status for drivers' }, { status: 400 });
       }
       updateFields = { status: body.status };
     } else if (!['manager', 'dispatcher'].includes(user.role)) {
       return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
     }
 
-    const driver = await Driver.findByIdAndUpdate(params.id, updateFields, {
+    const driver = await Driver.findByIdAndUpdate(id, updateFields, {
       new: true,
       runValidators: true,
     });

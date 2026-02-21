@@ -7,6 +7,7 @@ import { StatusBadge } from '@/components/StatusBadge';
 import { FormModal } from '@/components/FormModal';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
+import { Users, AlertCircle, CheckCircle, Check, ClipboardList, Plus } from 'lucide-react';
 
 export default function DriversPage() {
   const [drivers, setDrivers] = useState([]);
@@ -250,8 +251,8 @@ export default function DriversPage() {
           className="flex flex-col md:flex-row md:justify-between md:items-center gap-4"
         >
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold text-zinc-900">
-              👨‍✈️ Driver Profiles
+            <h1 className="text-4xl md:text-5xl font-bold text-zinc-900 flex items-center gap-3">
+              <Users className="w-10 h-10 text-blue-600" /> Driver Profiles
             </h1>
             <p className="text-zinc-500 mt-2">Manage drivers & safety records</p>
           </div>
@@ -262,9 +263,9 @@ export default function DriversPage() {
               setEditingId(null);
               setShowModal(true);
             }}
-            className="btn-primary self-start md:self-auto px-6 py-3 font-semibold"
+            className="btn-primary self-start md:self-auto px-6 py-3 font-semibold flex items-center gap-2"
           >
-            + Add Driver
+            <Plus className="w-5 h-5" /> Add Driver
           </motion.button>
         </motion.div>
 
@@ -274,7 +275,7 @@ export default function DriversPage() {
           className="card border-l-4 border-l-amber-500 p-6 bg-gradient-to-r from-amber-50 to-transparent"
         >
           <h3 className="font-bold text-zinc-900 mb-4 flex items-center gap-2">
-            ⚠️ License Expiry Alerts
+            <AlertCircle className="w-5 h-5 text-amber-600" /> License Expiry Alerts
           </h3>
           <ul className="space-y-2">
             {drivers
@@ -296,7 +297,9 @@ export default function DriversPage() {
                 </motion.li>
               ))}
             {!drivers.some((d) => isLicenseExpiring(d.licenseExpiryDate)) && (
-              <li className="text-emerald-600 font-semibold">✓ No expiring licenses found</li>
+              <li className="text-emerald-600 font-semibold flex items-center gap-2">
+                <Check className="w-5 h-5" /> No expiring licenses found
+              </li>
             )}
           </ul>
         </motion.div>
@@ -304,7 +307,7 @@ export default function DriversPage() {
         {/* Drivers Table */}
         <motion.div variants={itemVariants} className="card p-6">
           <h2 className="text-xl font-bold text-zinc-900 mb-6 flex items-center gap-2">
-            📋 All Drivers
+            <ClipboardList className="w-6 h-6 text-blue-600" /> All Drivers
             <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-zinc-100 text-sm font-semibold text-zinc-700">
               {drivers.length}
             </span>
