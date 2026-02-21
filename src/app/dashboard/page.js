@@ -1,12 +1,23 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { ProtectedLayout } from '@/components/ProtectedLayout';
-import { KPICard } from '@/components/KPICard';
-import { DataTable } from '@/components/DataTable';
-import { StatusBadge } from '@/components/StatusBadge';
-import toast from 'react-hot-toast';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
+import { ProtectedLayout } from "@/components/ProtectedLayout";
+import { KPICard } from "@/components/KPICard";
+import { DataTable } from "@/components/DataTable";
+import { StatusBadge } from "@/components/StatusBadge";
+import toast from "react-hot-toast";
+import { motion } from "framer-motion";
+import {
+  Radar,
+  Truck,
+  Wrench,
+  BarChart3,
+  Package,
+  Search,
+  Car,
+  Plane,
+  Filter,
+} from "lucide-react";
 
 export default function DashboardPage() {
   const [kpis, setKpis] = useState({
@@ -19,9 +30,9 @@ export default function DashboardPage() {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
-    type: '',
-    status: '',
-    region: '',
+    type: "",
+    status: "",
+    region: "",
   });
 
   useEffect(() => {
@@ -31,36 +42,35 @@ export default function DashboardPage() {
 
         // Fetch vehicles
         const vehicleQuery = new URLSearchParams();
-        if (filters.type) vehicleQuery.append('type', filters.type);
-        if (filters.status) vehicleQuery.append('status', filters.status);
-        if (filters.region) vehicleQuery.append('region', filters.region);
+        if (filters.type) vehicleQuery.append("type", filters.type);
+        if (filters.status) vehicleQuery.append("status", filters.status);
+        if (filters.region) vehicleQuery.append("region", filters.region);
 
         const vehiclesRes = await fetch(`/api/vehicles?${vehicleQuery}`);
         const vehiclesData = await vehiclesRes.json();
         setVehicles(vehiclesData.vehicles || []);
 
         // Fetch trips
-        const tripsRes = await fetch('/api/trips');
+        const tripsRes = await fetch("/api/trips");
         const tripsData = await tripsRes.json();
         setTrips(tripsData.trips || []);
 
         // Calculate KPIs
-        const activeFleet = vehiclesData.vehicles?.filter(
-          (v) => v.status === 'on_trip'
-        ).length || 0;
+        const activeFleet =
+          vehiclesData.vehicles?.filter((v) => v.status === "on_trip").length ||
+          0;
 
-        const maintenanceAlerts = vehiclesData.vehicles?.filter(
-          (v) => v.status === 'in_shop'
-        ).length || 0;
+        const maintenanceAlerts =
+          vehiclesData.vehicles?.filter((v) => v.status === "in_shop").length ||
+          0;
 
         const totalVehicles = vehiclesData.vehicles?.length || 1;
         const utilizationRate = Math.round(
-          ((activeFleet + maintenanceAlerts) / totalVehicles) * 100
+          ((activeFleet + maintenanceAlerts) / totalVehicles) * 100,
         );
 
-        const pendingCargo = tripsData.trips?.filter(
-          (t) => t.status === 'draft'
-        ).length || 0;
+        const pendingCargo =
+          tripsData.trips?.filter((t) => t.status === "draft").length || 0;
 
         setKpis({
           activeFleet,
@@ -69,8 +79,8 @@ export default function DashboardPage() {
           pendingCargo,
         });
       } catch (error) {
-        console.error('Error fetching data:', error);
-        toast.error('Failed to load dashboard data');
+        console.error("Error fetching data:", error);
+        toast.error("Failed to load dashboard data");
       } finally {
         setLoading(false);
       }
@@ -85,35 +95,35 @@ export default function DashboardPage() {
   };
 
   const vehicleColumns = [
-    { key: 'name', label: 'Vehicle Name' },
-    { key: 'licensePlate', label: 'License Plate' },
-    { key: 'type', label: 'Type' },
+    { key: "name", label: "Vehicle Name" },
+    { key: "licensePlate", label: "License Plate" },
+    { key: "type", label: "Type" },
     {
-      key: 'status',
-      label: 'Status',
+      key: "status",
+      label: "Status",
       render: (status) => <StatusBadge status={status} />,
     },
-    { key: 'maxCapacity', label: 'Max Capacity (kg)' },
+    { key: "maxCapacity", label: "Max Capacity (kg)" },
   ];
 
   const tripColumns = [
-    { key: 'tripNumber', label: 'Trip #' },
+    { key: "tripNumber", label: "Trip #" },
     {
-      key: 'vehicleId',
-      label: 'Vehicle',
-      render: (_, row) => row.vehicleId?.name || 'N/A',
+      key: "vehicleId",
+      label: "Vehicle",
+      render: (_, row) => row.vehicleId?.name || "N/A",
     },
     {
-      key: 'driverId',
-      label: 'Driver',
-      render: (_, row) => row.driverId?.name || 'N/A',
+      key: "driverId",
+      label: "Driver",
+      render: (_, row) => row.driverId?.name || "N/A",
     },
     {
-      key: 'status',
-      label: 'Status',
+      key: "status",
+      label: "Status",
       render: (status) => <StatusBadge status={status} />,
     },
-    { key: 'cargoWeight', label: 'Cargo (kg)' },
+    { key: "cargoWeight", label: "Cargo (kg)" },
   ];
 
   if (loading) {
@@ -129,7 +139,7 @@ export default function DashboardPage() {
             <motion.div
               className="relative w-16 h-16 mx-auto mb-4"
               animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
             >
               <div className="absolute inset-0 rounded-full border-4 border-zinc-200" />
               <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-zinc-900 border-r-zinc-900" />
@@ -155,7 +165,9 @@ export default function DashboardPage() {
   };
 
   return (
-    <ProtectedLayout requiredRoles={['manager', 'dispatcher', 'safety_officer', 'driver']}>
+    <ProtectedLayout
+      requiredRoles={["manager", "dispatcher", "safety_officer", "driver"]}
+    >
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -163,11 +175,23 @@ export default function DashboardPage() {
         className="space-y-8"
       >
         {/* Header */}
-        <motion.div variants={itemVariants}>
-          <h1 className="text-4xl md:text-5xl font-bold text-zinc-900 mb-2">
-            🎯 Command Center
-          </h1>
-          <p className="text-zinc-500 text-lg">Fleet Overview & Real-time Analytics</p>
+        <motion.div variants={itemVariants} className="flex flex-col gap-3">
+          <div className="flex items-center gap-3">
+            {/* Icon Badge */}
+            <div className="p-3 rounded-2xl bg-indigo-100 text-indigo-600 shadow-sm">
+              <Radar className="w-7 h-7" />
+            </div>
+
+            {/* Title */}
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-zinc-900">
+              Command Center
+            </h1>
+          </div>
+
+          {/* Subtitle */}
+          <p className="text-zinc-500 text-lg md:text-xl ml-14">
+            Fleet Overview & Real-time Analytics
+          </p>
         </motion.div>
 
         {/* KPIs Grid */}
@@ -178,25 +202,25 @@ export default function DashboardPage() {
           <KPICard
             title="Active Fleet"
             value={kpis.activeFleet}
-            icon="🚚"
+            icon={<Truck className="w-8 h-8 text-blue-600" />}
             trend={5}
           />
           <KPICard
             title="Maintenance Alerts"
             value={kpis.maintenanceAlerts}
-            icon="🔧"
+            icon={<Wrench className="w-8 h-8 text-amber-500" />}
             trend={-2}
           />
           <KPICard
             title="Utilization Rate"
             value={`${kpis.utilizationRate}%`}
-            icon="📊"
+            icon={<BarChart3 className="w-8 h-8 text-green-600" />}
             trend={3}
           />
           <KPICard
             title="Pending Cargo"
             value={kpis.pendingCargo}
-            icon="📦"
+            icon={<Package className="w-8 h-8 text-purple-600" />}
             trend={8}
           />
         </motion.div>
@@ -204,7 +228,7 @@ export default function DashboardPage() {
         {/* Filters */}
         <motion.div variants={itemVariants} className="card p-6">
           <h2 className="text-xl font-bold text-zinc-900 mb-6 flex items-center gap-2">
-            🔍 Advanced Filters
+            <Filter className="w-5 h-5 text-indigo-500" /> Advanced Filters
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
@@ -256,7 +280,7 @@ export default function DashboardPage() {
         {/* Vehicles Table */}
         <motion.div variants={itemVariants} className="card p-6">
           <h2 className="text-xl font-bold text-zinc-900 mb-6 flex items-center gap-2">
-            🚗 Fleet Vehicles
+            <Car className="w-5 h-5 text-blue-500" /> Fleet Vehicles
             <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-zinc-100 text-sm font-semibold text-zinc-700">
               {vehicles.length}
             </span>
@@ -267,7 +291,7 @@ export default function DashboardPage() {
         {/* Recent Trips */}
         <motion.div variants={itemVariants} className="card p-6">
           <h2 className="text-xl font-bold text-zinc-900 mb-6 flex items-center gap-2">
-            ✈️ Recent Trips
+            <Plane className="w-5 h-5 text-green-500" /> Recent Trips
           </h2>
           <DataTable columns={tripColumns} data={trips.slice(0, 10)} />
         </motion.div>
