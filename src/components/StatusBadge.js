@@ -1,4 +1,5 @@
 'use client';
+import { Check, Hourglass, Wrench, X, Dot } from 'lucide-react';
 
 const statusColors = {
   available: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
@@ -22,11 +23,11 @@ export function StatusBadge({ status, label }) {
   return (
     <span className={`inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold ${colorClass} transition-all duration-300`}>
       <span className="mr-2">
-        {status === 'available' || status === 'on_duty' ? '✓' : 
-         status === 'on_trip' || status === 'dispatched' || status === 'in_progress' ? '⏳' :
-         status === 'in_shop' ? '🔧' :
-         status === 'completed' ? '✓' :
-         status === 'suspended' || status === 'cancelled' ? '✕' : '•'}
+        {status === 'available' || status === 'on_duty' ? <Check className="w-4 h-4 text-emerald-600" /> :
+         status === 'on_trip' || status === 'dispatched' || status === 'in_progress' ? <Hourglass className="w-4 h-4 text-amber-500" /> :
+         status === 'in_shop' ? <Wrench className="w-4 h-4 text-red-600" /> :
+         status === 'completed' ? <Check className="w-4 h-4 text-emerald-600" /> :
+         status === 'suspended' || status === 'cancelled' ? <X className="w-4 h-4 text-zinc-700" /> : <Dot className="w-4 h-4 text-zinc-400" />}
       </span>
       {displayText}
     </span>

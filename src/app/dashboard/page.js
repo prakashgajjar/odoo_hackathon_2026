@@ -128,7 +128,7 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <ProtectedLayout>
+      <ProtectedLayout requiredRoles={["manager", "dispatcher", "safety_officer", "driver", "financial_analyst"]}>
         <div className="flex items-center justify-center min-h-[50vh]">
           <motion.div
             className="text-center"
@@ -166,7 +166,7 @@ export default function DashboardPage() {
 
   return (
     <ProtectedLayout
-      requiredRoles={["manager", "dispatcher", "safety_officer", "driver"]}
+      requiredRoles={["manager", "dispatcher", "safety_officer", "driver", "financial_analyst"]}
     >
       <motion.div
         variants={containerVariants}

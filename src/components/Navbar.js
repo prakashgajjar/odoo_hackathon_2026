@@ -1,4 +1,13 @@
 'use client';
+import {
+  BarChart3,
+  Truck,
+  UserCog,
+  Wrench,
+  LineChart,
+  Map,
+  Fuel,
+} from 'lucide-react';
 
 import Link from 'next/link';
 import { useState } from 'react';
@@ -24,27 +33,27 @@ export function Navbar({ user }) {
 
   const navLinks = {
     manager: [
-      { href: '/dashboard', label: 'Dashboard', icon: '📊' },
-      { href: '/vehicles', label: 'Vehicles', icon: '🚚' },
-      { href: '/drivers', label: 'Drivers', icon: '👨‍✈️' },
-      { href: '/maintenance', label: 'Maintenance', icon: '🔧' },
-      { href: '/analytics', label: 'Analytics', icon: '📈' },
+      { href: '/dashboard', label: 'Dashboard', icon: <BarChart3 className="w-5 h-5 text-blue-600" /> },
+      { href: '/vehicles', label: 'Vehicles', icon: <Truck className="w-5 h-5 text-amber-600" /> },
+      { href: '/drivers', label: 'Drivers', icon: <UserCog className="w-5 h-5 text-green-600" /> },
+      { href: '/maintenance', label: 'Maintenance', icon: <Wrench className="w-5 h-5 text-red-600" /> },
+      { href: '/analytics', label: 'Analytics', icon: <LineChart className="w-5 h-5 text-purple-600" /> },
     ],
     dispatcher: [
-      { href: '/dashboard', label: 'Dashboard', icon: '📊' },
-      { href: '/trips', label: 'Trips', icon: '🗺️' },
-      { href: '/drivers', label: 'Drivers', icon: '👨‍✈️' },
-      { href: '/expenses', label: 'Expenses', icon: '⛽' },
+      { href: '/dashboard', label: 'Dashboard', icon: <BarChart3 className="w-5 h-5 text-blue-600" /> },
+      { href: '/trips', label: 'Trips', icon: <Map className="w-5 h-5 text-indigo-600" /> },
+      { href: '/drivers', label: 'Drivers', icon: <UserCog className="w-5 h-5 text-green-600" /> },
+      { href: '/expenses', label: 'Expenses', icon: <Fuel className="w-5 h-5 text-orange-600" /> },
     ],
     safety_officer: [
-      { href: '/dashboard', label: 'Dashboard', icon: '📊' },
-      { href: '/drivers', label: 'Drivers', icon: '👨‍✈️' },
-      { href: '/maintenance', label: 'Maintenance', icon: '🔧' },
+      { href: '/dashboard', label: 'Dashboard', icon: <BarChart3 className="w-5 h-5 text-blue-600" /> },
+      { href: '/drivers', label: 'Drivers', icon: <UserCog className="w-5 h-5 text-green-600" /> },
+      { href: '/maintenance', label: 'Maintenance', icon: <Wrench className="w-5 h-5 text-red-600" /> },
     ],
     financial_analyst: [
-      { href: '/analytics', label: 'Analytics', icon: '📈' },
-      { href: '/expenses', label: 'Expenses', icon: '⛽' },
-      { href: '/dashboard', label: 'Dashboard', icon: '📊' },
+      { href: '/analytics', label: 'Analytics', icon: <LineChart className="w-5 h-5 text-purple-600" /> },
+      { href: '/expenses', label: 'Expenses', icon: <Fuel className="w-5 h-5 text-orange-600" /> },
+      { href: '/dashboard', label: 'Dashboard', icon: <BarChart3 className="w-5 h-5 text-blue-600" /> },
     ],
   };
 

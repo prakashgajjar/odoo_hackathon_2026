@@ -3,6 +3,18 @@
 import { useEffect, useState } from 'react';
 import { ProtectedLayout } from '@/components/ProtectedLayout';
 import { KPICard } from '@/components/KPICard';
+import {
+  BarChart3,
+  LineChart,
+  Wrench,
+  Fuel,
+  PieChart,
+  Car,
+  Download,
+  TrendingUp,
+  DollarSign,
+  Gauge,
+} from 'lucide-react';
 import { DataTable } from '@/components/DataTable';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
@@ -234,23 +246,25 @@ export default function AnalyticsPage() {
         className="space-y-8"
       >
         {/* Header */}
-        <motion.div
-          variants={itemVariants}
-          className="flex flex-col md:flex-row md:justify-between md:items-center gap-4"
-        >
-          <div>
-            <h1 className="text-4xl md:text-5xl font-bold text-zinc-900">
-              📊 Analytics & Reports
-            </h1>
-            <p className="text-zinc-500 mt-2">Financial performance & fleet insights</p>
+        <motion.div variants={itemVariants} className="flex flex-col gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-3 rounded-2xl bg-blue-100 text-blue-600">
+              <BarChart3 className="w-8 h-8" />
+            </div>
+            <div>
+              <h1 className="text-4xl md:text-5xl font-bold text-zinc-900">
+                Analytics & Reports
+              </h1>
+              <p className="text-zinc-500 mt-1">Financial performance & fleet insights</p>
+            </div>
           </div>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={exportToCSV}
-            className="btn-primary self-start md:self-auto px-6 py-3 font-semibold"
+            className="btn-primary self-start px-6 py-3 font-semibold flex items-center gap-2"
           >
-            📥 Export CSV
+            <Download className="w-5 h-5" /> Export CSV
           </motion.button>
         </motion.div>
 
@@ -262,31 +276,31 @@ export default function AnalyticsPage() {
           <KPICard
             title="Total Revenue"
             value={`$${analytics.totalRevenue.toLocaleString('en', { maximumFractionDigits: 0 })}`}
-            icon="💰"
+            icon={<LineChart className="w-7 h-7 text-green-600" />}
             trend={12}
           />
           <KPICard
             title="Fuel Cost"
             value={`$${analytics.totalFuelCost.toLocaleString('en', { maximumFractionDigits: 0 })}`}
-            icon="⛽"
+            icon={<Fuel className="w-7 h-7 text-orange-600" />}
             trend={-5}
           />
           <KPICard
             title="Maintenance"
             value={`$${analytics.totalMaintenanceCost.toLocaleString('en', { maximumFractionDigits: 0 })}`}
-            icon="🔧"
+            icon={<Wrench className="w-7 h-7 text-red-600" />}
             trend={-3}
           />
           <KPICard
             title="Fuel Efficiency"
             value={`${analytics.avgFuelEfficiency} km/L`}
-            icon="📈"
+            icon={<PieChart className="w-7 h-7 text-blue-600" />}
             trend={8}
           />
           <KPICard
             title="Net Profit"
             value={`$${netOperationalCost.toLocaleString('en', { maximumFractionDigits: 0 })}`}
-            icon="💹"
+            icon={<BarChart3 className="w-7 h-7 text-indigo-600" />}
             trend={netOperationalCost > 0 ? 15 : -5}
           />
         </motion.div>
@@ -294,7 +308,7 @@ export default function AnalyticsPage() {
         {/* Vehicle Analytics Table */}
         <motion.div variants={itemVariants} className="card p-6">
           <h2 className="text-xl font-bold text-zinc-900 mb-6 flex items-center gap-2">
-            📈 Vehicle Performance & ROI
+            <Car className="w-5 h-5 text-blue-500" /> Vehicle Performance & ROI
             <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-zinc-100 text-sm font-semibold text-zinc-700">
               {vehicles.length}
             </span>
@@ -310,7 +324,7 @@ export default function AnalyticsPage() {
           {/* Fleet Summary */}
           <motion.div className="card p-6">
             <h3 className="font-bold text-zinc-900 mb-6 flex items-center gap-2">
-              🚗 Fleet Summary
+              <Car className="w-5 h-5 text-blue-600" /> Fleet Summary
             </h3>
             <ul className="space-y-4">
               <li className="flex justify-between items-center">
@@ -337,7 +351,7 @@ export default function AnalyticsPage() {
           {/* Expense Breakdown */}
           <motion.div className="card p-6">
             <h3 className="font-bold text-zinc-900 mb-6 flex items-center gap-2">
-              💸 Expense Breakdown
+              <DollarSign className="w-5 h-5 text-green-600" /> Expense Breakdown
             </h3>
             <ul className="space-y-4">
               <li className="flex justify-between items-center">
@@ -362,7 +376,7 @@ export default function AnalyticsPage() {
           {/* Key Metrics */}
           <motion.div className="card p-6">
             <h3 className="font-bold text-zinc-900 mb-6 flex items-center gap-2">
-              📊 Key Metrics
+              <Gauge className="w-5 h-5 text-purple-600" /> Key Metrics
             </h3>
             <ul className="space-y-4">
               <li className="flex justify-between items-center">
@@ -383,6 +397,9 @@ export default function AnalyticsPage() {
           </motion.div>
         </motion.div>
       </motion.div>
+      <div>
+        {/* <AnalyticsGraphs/> */}
+      </div>
     </ProtectedLayout>
   );
 }
